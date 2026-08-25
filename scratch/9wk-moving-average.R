@@ -71,14 +71,14 @@ bpr_smoothed
 
 
 for (i in 1:nrow(bpr_smoothed)) {
-  w1 <- bpr_smoothed$window_start[i]
-  w2 <- w1 + 63
+  week1 <- bpr_smoothed$window_start[i]
+  w2 <- week1 + 63
 
-  K <- bpr_ions$K[bpr_ions$Sample_Date >= w1 & bpr_ions$Sample_Date < w2]
-  NO3N <- bpr_ions$`NO3-N`[bpr_ions$Sample_Date >= w1 & bpr_ions$Sample_Date < w2]
-  Mg <- bpr_ions$Mg[bpr_ions$Sample_Date >= w1 & bpr_ions$Sample_Date < w2]
-  Ca <- bpr_ions$Ca[bpr_ions$Sample_Date >= w1 & bpr_ions$Sample_Date < w2]
-  NH4N <- bpr_ions$`NH4-N`[bpr_ions$Sample_Date >= w1 & bpr_ions$Sample_Date < w2]
+  K <- bpr_ions$K[bpr_ions$Sample_Date >= week1 & bpr_ions$Sample_Date < w2]
+  NO3N <- bpr_ions$`NO3-N`[bpr_ions$Sample_Date >= week1 & bpr_ions$Sample_Date < w2]
+  Mg <- bpr_ions$Mg[bpr_ions$Sample_Date >= week1 & bpr_ions$Sample_Date < w2]
+  Ca <- bpr_ions$Ca[bpr_ions$Sample_Date >= week1 & bpr_ions$Sample_Date < w2]
+  NH4N <- bpr_ions$`NH4-N`[bpr_ions$Sample_Date >= week1 & bpr_ions$Sample_Date < w2]
 
   bpr_smoothed$K[i] <- mean(K, na.rm = TRUE)
   bpr_smoothed$`NO3-N`[i] <- mean(NO3N, na.rm = TRUE)
