@@ -23,7 +23,7 @@ moving_average <- function(bpr_ions) {
   for (i in 1:nrow(result)) {
     # Create variables for the start and end of the current window
     w1 <- result$window_start[i]
-    w2 <- w1 + 63
+    w2 <- w1 + "9 weeks"
 
     # Create a logical vector, called "in_window", that says which samples are inside the window
     # Hint: you'll compare sample dates to the start and end of the window
