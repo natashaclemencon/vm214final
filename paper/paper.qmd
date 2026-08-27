@@ -5,23 +5,20 @@ source("../R/moving-average.R")
 ```
 
 
-
 Data
 
 Raw data from Schaefer et al. downloaded from the EDI data portal
 ```{r}
-BQ1<-read_csv("../data/QuebradaCuenca1-Bisley.csv")
-BQ2<-read_csv("../data/QuebradaCuenca2-Bisley.csv")
-BQ3<-read_csv("../data/QuebradaCuenca3-Bisley.csv")
-RMP<-read_csv("../data/RioMameyesPuenteRoto.csv")
+BQ1 <- read_csv("../data/QuebradaCuenca1-Bisley.csv")
+BQ2 <- read_csv("../data/QuebradaCuenca2-Bisley.csv")
+BQ3 <- read_csv("../data/QuebradaCuenca3-Bisley.csv")
+RMP <- read_csv("../data/RioMameyesPuenteRoto.csv")
 ```
 
 Binding the four raw data frames
 ```{r}
-BPR<- bind_rows(BQ1, BQ2, BQ3, RMP)
+BPR <- bind_rows(BQ1, BQ2, BQ3, RMP)
 ```
-
-
 
 
 Methods
@@ -29,20 +26,54 @@ Methods
 Filtering for sample date and 5 ions: Pottassium, Nitrate, Calcium, Magenesium, and Ammonium.
 
 ```{r}
-bpr_ions<-BPR |> 
-  filter(Sample_Date>="1986-05-16" & Sample_Date<"1995-01-03") |> 
+bpr_ions <- BPR |>
+  filter(Sample_Date >= "1986-05-16" & Sample_Date < "1995-01-03") |>
   select(Sample_Date, K, `NO3-N`, Mg, Ca, `NH4-N`)
 
 summary(bpr_ions$Sample_Date)
 ```
 
 Function was created to run the code that assigns 9 week windows and calculates the mean concentration for each ion.
+```{r}
+moving_average <- function(bpr_ions)
+```
 
 
 The output of this code returns a wide tibble. This code converts the table to long tidy form.
+
+```{r}
+result_long <- result |>
+  pivot_longer(
+    cols = c(K, `NO3-N`, Mg, Ca, `NH4-N`),
+    names_to = "Ion",
+    values_to = "Concentration (mg/L)"
+  )
+```
+
 
 
 Results
 
 This code creates a plot figure containing 5 graphs. Each graph shows the results of the 9 week moving average analysis of ions sampled at four sites before and after Hurricane Hugo
 
+```{r}
+result_long |>
+  ggplot(
+    mapping = aes(
+      x = window_start,
+      y = `Concentration (mg/L)`,
+      color = Ion
+    )
+  ) +
+  geom_point() +
+  geom_line() +
+  labs(
+    title = "Ion Concentration",
+    x = "Year",
+    y = "Concentration"
+  ) +
+  facet_wrap(~Ion, scales = "free", ncol = 1) +
+  theme(
+    plot.title = element_text(hjust = 0.5)
+  )
+```
