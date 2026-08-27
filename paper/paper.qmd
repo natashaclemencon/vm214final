@@ -1,7 +1,7 @@
 Background
 ```{r}
 library(tidyverse)
-source("R/moving-average.R")
+source("../R/moving-average.R")
 ```
 git co
 
@@ -9,10 +9,10 @@ Data
 
 Raw data from Schaefer et al. downloaded from the EDI data portal
 ```{r}
-BQ1 <- read_csv("data/QuebradaCuenca1-Bisley.csv")
-BQ2 <- read_csv("data/QuebradaCuenca2-Bisley.csv")
-BQ3 <- read_csv("data/QuebradaCuenca3-Bisley.csv")
-RMP <- read_csv("data/RioMameyesPuenteRoto.csv")
+BQ1 <- read_csv("../data/QuebradaCuenca1-Bisley.csv")
+BQ2 <- read_csv("../data/QuebradaCuenca2-Bisley.csv")
+BQ3 <- read_csv("../data/QuebradaCuenca3-Bisley.csv")
+RMP <- read_csv("../data/RioMameyesPuenteRoto.csv")
 ```
 
 Binding the four raw data frames
@@ -32,46 +32,13 @@ bpr_ions <- BPR |>
 ```
 
 Function was created to run the code that assigns 9 week windows and calculates the mean concentration for each ion.
-```{r}
-result<- function(bpr_ions)
-```
+
 
 
 The output of this code returns a wide tibble. This code converts the table to long tidy form.
-
-```{r}
-result_long <- result |>
-  pivot_longer(
-    cols = c(K, `NO3-N`, Mg, Ca, `NH4-N`),
-    names_to = "Ion",
-    values_to = "Concentration (mg/L)"
-  )
-```
 
 
 
 Results
 
 This code creates a plot figure containing 5 graphs. Each graph shows the results of the 9 week moving average analysis of ions sampled at four sites before and after Hurricane Hugo
-
-```{r}
-result_long |>
-  ggplot(
-    mapping = aes(
-      x = window_start,
-      y = `Concentration (mg/L)`,
-      color = Ion
-    )
-  ) +
-  geom_point() +
-  geom_line() +
-  labs(
-    title = "Ion Concentration",
-    x = "Year",
-    y = "Concentration"
-  ) +
-  facet_wrap(~Ion, scales = "free", ncol = 1) +
-  theme(
-    plot.title = element_text(hjust = 0.5)
-  )
-```
