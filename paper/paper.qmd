@@ -1,35 +1,18 @@
 Background
-```{r}
-library(tidyverse)
-source("../R/moving-average.R")
-```
-git co
 
 Data
 
 Raw data from Schaefer et al. downloaded from the EDI data portal
-```{r}
-BQ1 <- read_csv("../data/QuebradaCuenca1-Bisley.csv")
-BQ2 <- read_csv("../data/QuebradaCuenca2-Bisley.csv")
-BQ3 <- read_csv("../data/QuebradaCuenca3-Bisley.csv")
-RMP <- read_csv("../data/RioMameyesPuenteRoto.csv")
-```
+
 
 Binding the four raw data frames
-```{r}
-BPR <- bind_rows(BQ1, BQ2, BQ3, RMP)
-```
 
 
 Methods
 
 Filtering for sample date and 5 ions: Pottassium, Nitrate, Calcium, Magenesium, and Ammonium.
 
-```{r}
-bpr_ions <- BPR |>
-  filter(Sample_Date >= "1986-05-16" & Sample_Date < "1995-01-03") |>
-  select(Sample_Date, K, `NO3-N`, Mg, Ca, `NH4-N`)
-```
+
 
 Function was created to run the code that assigns 9 week windows and calculates the mean concentration for each ion.
 
@@ -41,4 +24,6 @@ The output of this code returns a wide tibble. This code converts the table to l
 
 Results
 
-This code creates a plot figure containing 5 graphs. Each graph shows the results of the 9 week moving average analysis of ions sampled at four sites before and after Hurricane Hugo
+Each graph shows the results of the 9 week moving average analysis of ions sampled at four sites before and after Hurricane Hugo
+Colors represent differnt sites
+

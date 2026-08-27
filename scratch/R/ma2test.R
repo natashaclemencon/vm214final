@@ -1,15 +1,15 @@
 library(tidyverse)
 source(moving_average.R)
 
-BQ1<-read_csv("data/QuebradaCuenca1-Bisley.csv")
-BQ2<-read_csv("data/QuebradaCuenca2-Bisley.csv")
-BQ3<-read_csv("data/QuebradaCuenca3-Bisley.csv")
-RMP<-read_csv("data/RioMameyesPuenteRoto.csv")
+BQ1 <- read_csv("data/QuebradaCuenca1-Bisley.csv")
+BQ2 <- read_csv("data/QuebradaCuenca2-Bisley.csv")
+BQ3 <- read_csv("data/QuebradaCuenca3-Bisley.csv")
+RMP <- read_csv("data/RioMameyesPuenteRoto.csv")
 
-BPR<- bind_rows(BQ1, BQ2, BQ3, RMP)
+BPR <- bind_rows(BQ1, BQ2, BQ3, RMP)
 
-bpr_ions<-BPR |> 
-  filter(Sample_Date>="1986-05-16" & Sample_Date<"1995-01-03") |> 
+bpr_ions <- BPR |>
+  filter(Sample_Date >= "1986-05-16" & Sample_Date < "1995-01-03") |>
   select(Sample_Date, K, `NO3-N`, Mg, Ca, `NH4-N`)
 
 summary(bpr_ions$Sample_Date)
@@ -17,13 +17,14 @@ summary(bpr_ions$Sample_Date)
 
 #  The input to this function should be a data frame containing stream chemistry data
 moving_average <- function(ma) {
-
   # Initialize a tibble to contain the results
   result <- tibble(
-    window_start = seq(bpr_ions$Sample_Date[1],
-    bpr_ions$Sample_Date[nrow(bpr_ions)],
-    by = "9 weeks"),
-     K = NA,
+    window_start = seq(
+      bpr_ions$Sample_Date[1],
+      bpr_ions$Sample_Date[nrow(bpr_ions)],
+      by = "9 weeks"
+    ),
+    K = NA,
     `NO3-N` = NA,
     Mg = NA,
     Ca = NA,
@@ -55,8 +56,6 @@ moving_average <- function(ma) {
     result$Mg[i] <- mean(mg_window, na.rm = TRUE)
     result$Ca[i] <- mean(ca_window, na.rm = TRUE)
     result$`NH4-N`[i] <- mean(nh4n_window, na.rm = TRUE)
-
-
   }
 }
 
@@ -64,31 +63,31 @@ moving_average <- function(ma) {
 glimpse(result)
 
 
-
-# Converting tibble to long 
-# Converting tibble to long 
-result_long<-result|>
+# Converting tibble to long
+# Converting tibble to long
+result_long <- result |>
   pivot_longer(
     cols = c(K, `NO3-N`, Mg, Ca, `NH4-N`),
     names_to = "Ion",
     values_to = "Concentration (mg/L)"
   )
 
- result_long |> 
+result_long |>
   ggplot(
     mapping = aes(
-      x= window_start,
-      y= `Concentration (mg/L)`,
+      x = window_start,
+      y = `Concentration (mg/L)`,
       color = Ion
     )
-  )+
-  geom_point()+
-  geom_line()+
+  ) +
+  geom_point() +
+  geom_line() +
   labs(
-    title= "Ion Concentration",
-    x= "Year",
-    y= "Concentration"
-  )+
-  facet_wrap(~Ion, scales="free", ncol=1)+
-   theme(
-    plot.title = element_text(hjust = 0.5))
+    title = "Ion Concentration",
+    x = "Year",
+    y = "Concentration"
+  ) +
+  facet_wrap(~Ion, scales = "free", ncol = 1) +
+  theme(
+    plot.title = element_text(hjust = 0.5)
+  )
