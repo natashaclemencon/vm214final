@@ -1,6 +1,5 @@
 library(tidyverse)
-
-#testing code within moving average function
+source(moving_average.R)
 
 BQ1<-read_csv("data/QuebradaCuenca1-Bisley.csv")
 BQ2<-read_csv("data/QuebradaCuenca2-Bisley.csv")
@@ -16,6 +15,8 @@ bpr_ions<-BPR |>
 summary(bpr_ions$Sample_Date)
 
 
+#  The input to this function should be a data frame containing stream chemistry data
+moving_average <- function(ma) {
 
   # Initialize a tibble to contain the results
   result <- tibble(
@@ -57,8 +58,11 @@ summary(bpr_ions$Sample_Date)
 
 
   }
-  
+}
+
+
 glimpse(result)
+
 
 
 # Converting tibble to long 
